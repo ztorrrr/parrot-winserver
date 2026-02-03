@@ -7,7 +7,7 @@ DEFAULT_REGION = "ap-northeast-2"
 
 # Server
 DEFAULT_HOST = "0.0.0.0"
-DEFAULT_PORT = 8888
+DEFAULT_PORT = 8889
 
 # CORS 설정
 ALLOWED_ORIGINS = [
