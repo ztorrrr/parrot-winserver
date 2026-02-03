@@ -158,7 +158,7 @@ output_path = create_excel_with_odata_com('http://localhost:8888/odata/musinsa_d
 `.env` 파일 필요:
 ```
 ENVIRONMENT=DEV
-AWS_DEFAULT_REGION=ap-northeast-2
+DEFAULT_REGION=ap-northeast-2
 GCP_PROJECT_ID=your-project
 GCS_BUCKET_NAME=your-bucket
 GCS_FILE_NAME=data.csv

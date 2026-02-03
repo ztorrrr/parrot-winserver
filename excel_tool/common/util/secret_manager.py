@@ -1,17 +1,21 @@
+"""
+AWS Secret Manager 유틸리티
+"""
+
 import base64
 import json
-import os
 
 import boto3
 from botocore.exceptions import ClientError
 from cachetools.func import ttl_cache
-
-DEFAULT_REGION = os.getenv("AWS_DEFAULT_REGION", "ap-northeast-2")
+from excel_tool.common.config.constant import DEFAULT_REGION
 
 
 class NotFoundSecretKeyError(Exception):
     def __init__(self, key):
-        Exception.__init__(self, f"'Secrets Manager can't find the specified secret : {key}")
+        Exception.__init__(
+            self, f"'Secrets Manager can't find the specified secret : {key}"
+        )
 
 
 class NotFoundSecretItemError(Exception):
@@ -29,6 +33,7 @@ def get_secret(secret_name, region_name=DEFAULT_REGION):
     except ClientError as e:
         if e.response["Error"]["Code"] == "ResourceNotFoundException":
             raise NotFoundSecretKeyError(secret_name)
+        raise
     else:
         if "SecretString" in response:
             secret = response["SecretString"]

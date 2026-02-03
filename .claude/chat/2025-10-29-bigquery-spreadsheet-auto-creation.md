@@ -316,7 +316,7 @@ curl -X POST "http://localhost:8888/spreadsheet/create-with-bigquery?title=custo
 
 **ADC (Application Default Credentials) 파일 위치**:
 - Windows: `%APPDATA%\gcloud\application_default_credentials.json`
-- Linux/Mac: `~/.config/gcloud/application_default_credentials.json`
+- Linux/Mac: `~/.setting/gcloud/application_default_credentials.json`
 
 **인증 우선순위**:
 1. ADC 파일 (사용자 계정: `dc_team@madup.com`)
