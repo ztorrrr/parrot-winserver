@@ -35,7 +35,7 @@ class ExcelGenerateRequest(BaseModel):
     odata_url: str = Field(
         ...,
         description="OData 엔드포인트 URL",
-        examples=["https://api.example.com/odata/analytics/tvf_wkdiw121"]
+        examples=["https://api.example.com/dataset/{dataset_id}/templates/{template_id}/odata"]
     )
 
     class Config:
@@ -112,7 +112,7 @@ class ExcelGenerateResponse(BaseModel):
                 "dataset_id": "ds_abc123",
                 "template_id": "tvf_wkdiw121",
                 "tvf_name": "monthly_summary",
-                "odata_url": "https://parrot-api/dataset/{dataset_id}/templates/{template_id}/odata"
+                "odata_url": "https://api.example.com/dataset/{dataset_id}/templates/{template_id}/odata"
             }
         }
 
