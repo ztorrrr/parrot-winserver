@@ -44,7 +44,7 @@ class ExcelGenerateRequest(BaseModel):
                 "dataset_id": "ds_abc123",
                 "template_id": "tvf_wkdiw121",
                 "tvf_name": "monthly_summary",
-                "odata_url": "https://api.example.com/odata/analytics/tvf_wkdiw121"
+                "odata_url": "https://api.example.com/dataset/{dataset_id}/templates/{template_id}/odata"
             }
         }
 
