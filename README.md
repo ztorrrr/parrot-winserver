@@ -54,6 +54,7 @@ Authorization: Basic <credentials>
 Content-Type: application/json
 
 {
+  "project_id": "proj_001",
   "dataset_id": "ds_abc123",
   "template_id": "tvf_wkdiw121",
   "tvf_name": "monthly_summary",
@@ -63,6 +64,7 @@ Content-Type: application/json
 
 | 파라미터 | 설명 |
 |----------|------|
+| `project_id` | 프로젝트 ID (S3 저장 경로에 사용) |
 | `dataset_id` | 데이터셋 ID (S3 저장 경로에 사용) |
 | `template_id` | 템플릿 ID (S3 저장 경로에 사용) |
 | `tvf_name` | TVF 이름 (파일명에 사용) |
@@ -73,9 +75,10 @@ Content-Type: application/json
 {
   "success": true,
   "download_url": "https://s3.amazonaws.com/...",
-  "s3_key": "parrot/dataset/excel/ds_abc123/tvf_wkdiw121/ds_abc123_monthly_summary.xlsx",
+  "s3_key": "parrot/dataset/excel/proj_001/ds_abc123/tvf_wkdiw121/ds_abc123_monthly_summary.xlsx",
   "expires_in": 3600,
   "filename": "ds_abc123_monthly_summary.xlsx",
+  "project_id": "proj_001",
   "dataset_id": "ds_abc123",
   "template_id": "tvf_wkdiw121",
   "tvf_name": "monthly_summary",
@@ -86,7 +89,7 @@ Content-Type: application/json
 ## S3 저장 경로
 
 ```
-parrot/dataset/excel/{dataset_id}/{template_id}/{dataset_id}_{tvf_name}.xlsx
+parrot/dataset/excel/{project_id}/{dataset_id}/{template_id}/{dataset_id}_{tvf_name}.xlsx
 ```
 
 ## 인증 설정

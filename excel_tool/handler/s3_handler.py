@@ -66,6 +66,7 @@ class S3Handler:
     def upload_dataset_excel(
         self,
         file_path: str,
+        project_id: str,
         dataset_id: str,
         template_id: str,
         tvf_name: str,
@@ -74,11 +75,12 @@ class S3Handler:
         """
         데이터셋 Excel 파일을 S3에 업로드하고 다운로드 URL 반환
 
-        저장 경로: parrot/dataset/excel/{dataset_id}/{template_id}/{filename}
+        저장 경로: parrot/dataset/excel/{project_id}/{dataset_id}/{template_id}/{filename}
         파일명: {dataset_id}_{tvf_name}.xlsx
 
         Args:
             file_path: 로컬 Excel 파일 경로
+            project_id: 프로젝트 ID
             dataset_id: 데이터셋 ID
             template_id: 템플릿 ID
             tvf_name: TVF 이름
@@ -98,8 +100,8 @@ class S3Handler:
         # 파일명 생성: {dataset_id}_{tvf_name}.xlsx
         filename = f"{dataset_id}_{tvf_name}.xlsx"
 
-        # S3 key 생성: parrot/dataset/excel/{dataset_id}/{template_id}/{filename}
-        key = f"{self.setting.S3_DATASET_EXCEL_PREFIX}/{dataset_id}/{template_id}/{filename}"
+        # S3 key 생성: parrot/dataset/excel/{project_id}/{dataset_id}/{template_id}/{filename}
+        key = f"{self.setting.S3_DATASET_EXCEL_PREFIX}/{project_id}/{dataset_id}/{template_id}/{filename}"
 
         # 업로드
         self.upload_excel_file(file_path, key)

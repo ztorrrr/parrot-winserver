@@ -14,6 +14,12 @@ from pydantic import BaseModel, Field, HttpUrl
 class ExcelGenerateRequest(BaseModel):
     """Excel 생성 요청 스키마"""
 
+    project_id: str = Field(
+        ...,
+        description="프로젝트 ID (S3 저장 경로에 사용)",
+        examples=["proj_001", "proj_abc"]
+    )
+
     dataset_id: str = Field(
         ...,
         description="데이터셋 ID (S3 저장 경로에 사용)",
@@ -41,6 +47,7 @@ class ExcelGenerateRequest(BaseModel):
     class Config:
         json_schema_extra = {
             "example": {
+                "project_id": "proj_001",
                 "dataset_id": "ds_abc123",
                 "template_id": "tvf_wkdiw121",
                 "tvf_name": "monthly_summary",
@@ -81,6 +88,11 @@ class ExcelGenerateResponse(BaseModel):
         description="생성된 파일명"
     )
 
+    project_id: str = Field(
+        ...,
+        description="프로젝트 ID"
+    )
+
     dataset_id: str = Field(
         ...,
         description="데이터셋 ID"
@@ -105,10 +117,11 @@ class ExcelGenerateResponse(BaseModel):
         json_schema_extra = {
             "example": {
                 "success": True,
-                "download_url": "https://s3.amazonaws.com/bucket/parrot/dataset/excel/ds_abc123/tvf_wkdiw121/ds_abc123_monthly_summary.xlsx?...",
-                "s3_key": "parrot/dataset/excel/ds_abc123/tvf_wkdiw121/ds_abc123_monthly_summary.xlsx",
+                "download_url": "https://s3.amazonaws.com/bucket/parrot/dataset/excel/proj_001/ds_abc123/tvf_wkdiw121/ds_abc123_monthly_summary.xlsx?...",
+                "s3_key": "parrot/dataset/excel/proj_001/ds_abc123/tvf_wkdiw121/ds_abc123_monthly_summary.xlsx",
                 "expires_in": 3600,
                 "filename": "ds_abc123_monthly_summary.xlsx",
+                "project_id": "proj_001",
                 "dataset_id": "ds_abc123",
                 "template_id": "tvf_wkdiw121",
                 "tvf_name": "monthly_summary",

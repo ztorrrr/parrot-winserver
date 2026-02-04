@@ -68,7 +68,7 @@ async def generate_excel(
     - S3에 업로드 후 presigned URL 반환
     - 임시 파일은 자동 삭제
 
-    S3 저장 경로: parrot/dataset/excel/{dataset_id}/{template_id}/{filename}
+    S3 저장 경로: parrot/dataset/excel/{project_id}/{dataset_id}/{template_id}/{filename}
     파일명 형식: {dataset_id}_{tvf_name}.xlsx
     """
     # 내부 설정값
@@ -94,7 +94,7 @@ async def generate_excel(
 
         # Excel 파일 생성
         logger.info(
-            f"[{current_user}] Generating Excel for dataset_id={request.dataset_id}, "
+            f"[{current_user}] Generating Excel for project_id={request.project_id}, dataset_id={request.dataset_id}, "
             f"template_id={request.template_id}, tvf_name={request.tvf_name}, odata_url={request.odata_url}"
         )
         output_path = create_excel_with_odata(
@@ -106,6 +106,7 @@ async def generate_excel(
         # S3에 업로드
         upload_result = s3_handler.upload_dataset_excel(
             file_path=output_path,
+            project_id=request.project_id,
             dataset_id=request.dataset_id,
             template_id=request.template_id,
             tvf_name=request.tvf_name
@@ -122,6 +123,7 @@ async def generate_excel(
             s3_key=upload_result['key'],
             expires_in=upload_result['expires_in'],
             filename=upload_result['filename'],
+            project_id=request.project_id,
             dataset_id=request.dataset_id,
             template_id=request.template_id,
             tvf_name=request.tvf_name,
