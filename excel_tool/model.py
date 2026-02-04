@@ -20,24 +20,24 @@ class ExcelGenerateRequest(BaseModel):
         examples=["ds_abc123", "dataset_001"]
     )
 
-    tvf_table_name: str = Field(
+    template_id: str = Field(
         ...,
-        description="BigQuery TVF 결과 테이블명 (S3 저장 경로 및 파일명에 사용)",
-        examples=["tvf_monthly_summary", "tvf_campaign_result"]
+        description="템플릿 ID (S3 저장 경로 및 파일명에 사용)",
+        examples=["tvf_wkdiw121", "tvf_campaign_result"]
     )
 
     odata_url: str = Field(
         ...,
         description="OData 엔드포인트 URL",
-        examples=["https://api.example.com/odata/analytics/tvf_monthly_summary"]
+        examples=["https://api.example.com/odata/analytics/tvf_wkdiw121"]
     )
 
     class Config:
         json_schema_extra = {
             "example": {
                 "dataset_id": "ds_abc123",
-                "tvf_table_name": "tvf_monthly_summary",
-                "odata_url": "https://api.example.com/odata/analytics/tvf_monthly_summary"
+                "template_id": "tvf_wkdiw121",
+                "odata_url": "https://api.example.com/odata/analytics/tvf_wkdiw121"
             }
         }
 
@@ -79,9 +79,9 @@ class ExcelGenerateResponse(BaseModel):
         description="데이터셋 ID"
     )
 
-    tvf_table_name: str = Field(
+    template_id: str = Field(
         ...,
-        description="BigQuery TVF 결과 테이블명"
+        description="템플릿 ID"
     )
 
     odata_url: str = Field(
@@ -93,13 +93,13 @@ class ExcelGenerateResponse(BaseModel):
         json_schema_extra = {
             "example": {
                 "success": True,
-                "download_url": "https://s3.amazonaws.com/bucket/parrot/dataset/excel/ds_abc123/tvf_monthly_summary/ds_abc123_tvf_monthly_summary_20240201_143052.xlsx?...",
-                "s3_key": "parrot/dataset/excel/ds_abc123/tvf_monthly_summary/ds_abc123_tvf_monthly_summary_20240201_143052.xlsx",
+                "download_url": "https://s3.amazonaws.com/bucket/parrot/dataset/excel/ds_abc123/tvf_wkdiw121/ds_abc123_tvf_wkdiw121_20240201_143052.xlsx?...",
+                "s3_key": "parrot/dataset/excel/ds_abc123/tvf_wkdiw121/ds_abc123_tvf_wkdiw121_20240201_143052.xlsx",
                 "expires_in": 3600,
-                "filename": "ds_abc123_tvf_monthly_summary_20240201_143052.xlsx",
+                "filename": "ds_abc123_tvf_wkdiw121_20240201_143052.xlsx",
                 "dataset_id": "ds_abc123",
-                "tvf_table_name": "tvf_monthly_summary",
-                "odata_url": "https://api.example.com/odata/analytics/tvf_monthly_summary"
+                "template_id": "tvf_wkdiw121",
+                "odata_url": "https://api.example.com/odata/analytics/tvf_wkdiw121"
             }
         }
 

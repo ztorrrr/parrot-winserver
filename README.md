@@ -55,8 +55,8 @@ Content-Type: application/json
 
 {
   "dataset_id": "ds_abc123",
-  "tvf_table_name": "tvf_monthly_summary",
-  "odata_url": "https://api.example.com/odata/analytics/tvf_monthly_summary"
+  "template_id": "tvf_wkdiw121",
+  "odata_url": "https://api.example.com/odata/analytics/tvf_wkdiw121"
 }
 ```
 
@@ -65,19 +65,19 @@ Content-Type: application/json
 {
   "success": true,
   "download_url": "https://s3.amazonaws.com/...",
-  "s3_key": "parrot/dataset/excel/ds_abc123/tvf_monthly_summary/ds_abc123_tvf_monthly_summary_20240201_143052.xlsx",
+  "s3_key": "parrot/dataset/excel/ds_abc123/tvf_wkdiw121/ds_abc123_tvf_wkdiw121_20240201_143052.xlsx",
   "expires_in": 3600,
-  "filename": "ds_abc123_tvf_monthly_summary_20240201_143052.xlsx",
+  "filename": "ds_abc123_tvf_wkdiw121_20240201_143052.xlsx",
   "dataset_id": "ds_abc123",
-  "tvf_table_name": "tvf_monthly_summary",
-  "odata_url": "https://api.example.com/odata/analytics/tvf_monthly_summary"
+  "template_id": "tvf_wkdiw121",
+  "odata_url": "https://api.example.com/odata/analytics/tvf_wkdiw121"
 }
 ```
 
 ## S3 저장 경로
 
 ```
-parrot/dataset/excel/{dataset_id}/{tvf_table_name}/{dataset_id}_{tvf_table_name}_{timestamp}.xlsx
+parrot/dataset/excel/{dataset_id}/{template_id}/{dataset_id}_{template_id}_{timestamp}.xlsx
 ```
 
 ## 인증 설정

@@ -68,8 +68,8 @@ async def generate_excel(
     - S3에 업로드 후 presigned URL 반환
     - 임시 파일은 자동 삭제
 
-    S3 저장 경로: parrot/dataset/excel/{dataset_id}/{tvf_table_name}/{filename}
-    파일명 형식: {dataset_id}_{tvf_table_name}_{timestamp}.xlsx
+    S3 저장 경로: parrot/dataset/excel/{dataset_id}/{template_id}/{filename}
+    파일명 형식: {dataset_id}_{template_id}_{timestamp}.xlsx
     """
     # 내부 설정값
     AUTH_TYPE = "basic"  # TODO: 배포 전 결정 필요 (basic | webapi)
@@ -89,13 +89,13 @@ async def generate_excel(
                 ).model_dump()
             )
 
-        # Excel 워크시트 이름: tvf_table_name 사용
-        excel_worksheet_name = request.tvf_table_name
+        # Excel 워크시트 이름: template_id 사용
+        excel_worksheet_name = request.template_id
 
         # Excel 파일 생성
         logger.info(
             f"[{current_user}] Generating Excel for dataset_id={request.dataset_id}, "
-            f"tvf_table_name={request.tvf_table_name}, odata_url={request.odata_url}"
+            f"template_id={request.template_id}, odata_url={request.odata_url}"
         )
         output_path = create_excel_with_odata(
             odata_url=request.odata_url,
@@ -107,7 +107,7 @@ async def generate_excel(
         upload_result = s3_handler.upload_dataset_excel(
             file_path=output_path,
             dataset_id=request.dataset_id,
-            tvf_table_name=request.tvf_table_name
+            template_id=request.template_id
         )
 
         # 임시 파일 삭제 (백그라운드)
@@ -122,7 +122,7 @@ async def generate_excel(
             expires_in=upload_result['expires_in'],
             filename=upload_result['filename'],
             dataset_id=request.dataset_id,
-            tvf_table_name=request.tvf_table_name,
+            template_id=request.template_id,
             odata_url=request.odata_url
         )
 
