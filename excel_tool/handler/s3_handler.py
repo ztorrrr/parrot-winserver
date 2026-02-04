@@ -68,18 +68,20 @@ class S3Handler:
         file_path: str,
         dataset_id: str,
         template_id: str,
+        tvf_name: str,
         expiry: int = None
     ) -> Dict[str, Any]:
         """
         데이터셋 Excel 파일을 S3에 업로드하고 다운로드 URL 반환
 
         저장 경로: parrot/dataset/excel/{dataset_id}/{template_id}/{filename}
-        파일명: {dataset_id}_{template_id}_{timestamp}.xlsx
+        파일명: {dataset_id}_{tvf_name}.xlsx
 
         Args:
             file_path: 로컬 Excel 파일 경로
             dataset_id: 데이터셋 ID
             template_id: 템플릿 ID
+            tvf_name: TVF 이름
             expiry: URL 만료 시간 (초)
 
         Returns:
@@ -93,9 +95,8 @@ class S3Handler:
         if expiry is None:
             expiry = self.setting.S3_PRESIGNED_URL_EXPIRY
 
-        # 파일명 생성: {dataset_id}_{template_id}_{timestamp}.xlsx
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename = f"{dataset_id}_{template_id}_{timestamp}.xlsx"
+        # 파일명 생성: {dataset_id}_{tvf_name}.xlsx
+        filename = f"{dataset_id}_{tvf_name}.xlsx"
 
         # S3 key 생성: parrot/dataset/excel/{dataset_id}/{template_id}/{filename}
         key = f"{self.setting.S3_DATASET_EXCEL_PREFIX}/{dataset_id}/{template_id}/{filename}"

@@ -56,20 +56,29 @@ Content-Type: application/json
 {
   "dataset_id": "ds_abc123",
   "template_id": "tvf_wkdiw121",
+  "tvf_name": "monthly_summary",
   "odata_url": "https://api.example.com/odata/analytics/tvf_wkdiw121"
 }
 ```
+
+| 파라미터 | 설명 |
+|----------|------|
+| `dataset_id` | 데이터셋 ID (S3 저장 경로에 사용) |
+| `template_id` | 템플릿 ID (S3 저장 경로에 사용) |
+| `tvf_name` | TVF 이름 (파일명에 사용) |
+| `odata_url` | OData 엔드포인트 URL |
 
 **응답 예시:**
 ```json
 {
   "success": true,
   "download_url": "https://s3.amazonaws.com/...",
-  "s3_key": "parrot/dataset/excel/ds_abc123/tvf_wkdiw121/ds_abc123_tvf_wkdiw121_20240201_143052.xlsx",
+  "s3_key": "parrot/dataset/excel/ds_abc123/tvf_wkdiw121/ds_abc123_monthly_summary.xlsx",
   "expires_in": 3600,
-  "filename": "ds_abc123_tvf_wkdiw121_20240201_143052.xlsx",
+  "filename": "ds_abc123_monthly_summary.xlsx",
   "dataset_id": "ds_abc123",
   "template_id": "tvf_wkdiw121",
+  "tvf_name": "monthly_summary",
   "odata_url": "https://api.example.com/odata/analytics/tvf_wkdiw121"
 }
 ```
@@ -77,7 +86,7 @@ Content-Type: application/json
 ## S3 저장 경로
 
 ```
-parrot/dataset/excel/{dataset_id}/{template_id}/{dataset_id}_{template_id}_{timestamp}.xlsx
+parrot/dataset/excel/{dataset_id}/{template_id}/{dataset_id}_{tvf_name}.xlsx
 ```
 
 ## 인증 설정

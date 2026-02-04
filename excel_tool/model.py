@@ -22,8 +22,14 @@ class ExcelGenerateRequest(BaseModel):
 
     template_id: str = Field(
         ...,
-        description="템플릿 ID (S3 저장 경로 및 파일명에 사용)",
+        description="템플릿 ID (S3 저장 경로에 사용)",
         examples=["tvf_wkdiw121", "tvf_campaign_result"]
+    )
+
+    tvf_name: str = Field(
+        ...,
+        description="TVF 이름 (파일명에 사용)",
+        examples=["monthly_summary", "campaign_result"]
     )
 
     odata_url: str = Field(
@@ -37,6 +43,7 @@ class ExcelGenerateRequest(BaseModel):
             "example": {
                 "dataset_id": "ds_abc123",
                 "template_id": "tvf_wkdiw121",
+                "tvf_name": "monthly_summary",
                 "odata_url": "https://api.example.com/odata/analytics/tvf_wkdiw121"
             }
         }
@@ -84,6 +91,11 @@ class ExcelGenerateResponse(BaseModel):
         description="템플릿 ID"
     )
 
+    tvf_name: str = Field(
+        ...,
+        description="TVF 이름"
+    )
+
     odata_url: str = Field(
         ...,
         description="Excel에 포함된 OData URL"
@@ -93,13 +105,14 @@ class ExcelGenerateResponse(BaseModel):
         json_schema_extra = {
             "example": {
                 "success": True,
-                "download_url": "https://s3.amazonaws.com/bucket/parrot/dataset/excel/ds_abc123/tvf_wkdiw121/ds_abc123_tvf_wkdiw121_20240201_143052.xlsx?...",
-                "s3_key": "parrot/dataset/excel/ds_abc123/tvf_wkdiw121/ds_abc123_tvf_wkdiw121_20240201_143052.xlsx",
+                "download_url": "https://s3.amazonaws.com/bucket/parrot/dataset/excel/ds_abc123/tvf_wkdiw121/ds_abc123_monthly_summary.xlsx?...",
+                "s3_key": "parrot/dataset/excel/ds_abc123/tvf_wkdiw121/ds_abc123_monthly_summary.xlsx",
                 "expires_in": 3600,
-                "filename": "ds_abc123_tvf_wkdiw121_20240201_143052.xlsx",
+                "filename": "ds_abc123_monthly_summary.xlsx",
                 "dataset_id": "ds_abc123",
                 "template_id": "tvf_wkdiw121",
-                "odata_url": "https://api.example.com/odata/analytics/tvf_wkdiw121"
+                "tvf_name": "monthly_summary",
+                "odata_url": "https://parrot-api/dataset/{dataset_id}/templates/{template_id}/odata"
             }
         }
 
