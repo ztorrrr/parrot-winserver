@@ -64,7 +64,8 @@ class ExcelGenerator:
         odata_url: str,
         table_name: str = "Data",
         output_path: Optional[str] = None,
-        auth_type: str = "webapi"
+        auth_type: str = "webapi",
+        auth_token: Optional[str] = None
     ) -> str:
         """
         OData 연결이 포함된 Excel 파일 생성
@@ -74,6 +75,7 @@ class ExcelGenerator:
             table_name: Excel 테이블 이름
             output_path: 출력 파일 경로 (None이면 임시 파일 생성)
             auth_type: 인증 방식 ("basic" | "webapi")
+            auth_token: Bearer 인증 토큰 (webapi 방식일 때 사용)
 
         Returns:
             생성된 Excel 파일 경로
@@ -116,7 +118,7 @@ class ExcelGenerator:
             worksheet.Name = table_name
 
             # Power Query M 코드 생성
-            m_code = self._generate_m_code(odata_url, auth_type)
+            m_code = self._generate_m_code(odata_url, auth_type, auth_token)
             query_name = f"Query_{table_name}"
 
             # 쿼리 추가 시도
@@ -124,7 +126,7 @@ class ExcelGenerator:
                 self._add_power_query(worksheet, m_code, query_name)
             except Exception as e:
                 logger.error(f"Error adding query: {e}")
-                self._add_connection_guide(worksheet, odata_url, table_name, auth_type)
+                self._add_connection_guide(worksheet, odata_url, table_name, auth_type, auth_token)
 
             # 파일 저장
             self.workbook.SaveAs(output_path, FileFormat=51)  # xlOpenXMLWorkbook
@@ -190,9 +192,9 @@ class ExcelGenerator:
                 logger.warning(f"Retry creating workbook {retry_count}/{max_retries}: {e}")
                 time.sleep(1)
 
-    def _generate_m_code(self, odata_url: str, auth_type: str) -> str:
+    def _generate_m_code(self, odata_url: str, auth_type: str, auth_token: Optional[str] = None) -> str:
         """Power Query M 코드 생성"""
-        if auth_type == "webapi":
+        if auth_type == "webapi" and auth_token:
             return f'''
 let
     Source = OData.Feed(
@@ -200,7 +202,7 @@ let
         null,
         [
             Implementation="2.0",
-            ApiKeyName="Authorization"
+            Headers=[Authorization="Bearer {auth_token}"]
         ]
     )
 in
@@ -253,7 +255,8 @@ in
         worksheet,
         odata_url: str,
         table_name: str,
-        auth_type: str
+        auth_type: str,
+        auth_token: Optional[str] = None
     ):
         """연결 정보 및 가이드 추가 (Power Query 실패 시)"""
         try:
@@ -261,23 +264,28 @@ in
             worksheet.Range("A2").Value = "URL:"
             worksheet.Range("B2").Value = odata_url
             worksheet.Range("A3").Value = "인증 방식:"
-            worksheet.Range("B3").Value = "웹 API (Bearer Token)" if auth_type == "webapi" else "Basic (ID/PW)"
-            worksheet.Range("A5").Value = "사용 방법:"
-            worksheet.Range("A6").Value = "1. 상단 '데이터' 탭 클릭"
-            worksheet.Range("A7").Value = "2. '쿼리 및 연결' 클릭"
-            worksheet.Range("A8").Value = "3. 쿼리를 우클릭하여 '다음으로 로드'"
-            worksheet.Range("A9").Value = "4. '연결만 만들기' + '데이터 모델에 이 데이터 추가' 선택"
+            worksheet.Range("B3").Value = "Bearer Token" if auth_type == "webapi" else "Basic (ID/PW)"
+
+            if auth_type == "webapi" and auth_token:
+                worksheet.Range("A4").Value = "인증 토큰:"
+                worksheet.Range("B4").Value = f"Bearer {auth_token}"
+
+            worksheet.Range("A6").Value = "사용 방법:"
+            worksheet.Range("A7").Value = "1. 상단 '데이터' 탭 클릭"
+            worksheet.Range("A8").Value = "2. '쿼리 및 연결' 클릭"
+            worksheet.Range("A9").Value = "3. 쿼리를 우클릭하여 '다음으로 로드'"
+            worksheet.Range("A10").Value = "4. '연결만 만들기' + '데이터 모델에 이 데이터 추가' 선택"
 
             if auth_type == "webapi":
-                worksheet.Range("A10").Value = "5. 인증 창에서 '웹 API' 탭 선택 후 'Bearer <token>' 입력"
+                worksheet.Range("A11").Value = "5. 인증 창이 나타나면 토큰이 이미 설정되어 있습니다."
             else:
-                worksheet.Range("A10").Value = "5. 인증 창에서 '기본' 탭 선택 후 ID/PW 입력"
+                worksheet.Range("A11").Value = "5. 인증 창에서 '기본' 탭 선택 후 ID/PW 입력"
 
             # 서식 설정
             worksheet.Range("A1").Font.Bold = True
             worksheet.Range("A1").Font.Size = 14
-            worksheet.Range("A2:A10").Font.Bold = True
-            worksheet.Range("B2:B3").Font.Color = -16776961  # 파란색
+            worksheet.Range("A2:A11").Font.Bold = True
+            worksheet.Range("B2:B4").Font.Color = -16776961  # 파란색
             worksheet.Columns("A:B").AutoFit()
 
         except Exception as e:
@@ -288,7 +296,8 @@ def create_excel_with_odata(
     odata_url: str,
     table_name: str = "Data",
     output_path: Optional[str] = None,
-    auth_type: str = "webapi"
+    auth_type: str = "webapi",
+    auth_token: Optional[str] = None
 ) -> str:
     """
     편의 함수: OData 연결이 포함된 Excel 파일 생성
@@ -298,12 +307,13 @@ def create_excel_with_odata(
         table_name: Excel 테이블 이름
         output_path: 출력 파일 경로
         auth_type: 인증 방식 ("basic" | "webapi")
+        auth_token: Bearer 인증 토큰 (webapi 방식일 때 사용)
 
     Returns:
         생성된 Excel 파일 경로
     """
     generator = ExcelGenerator()
     try:
-        return generator.create_odata_excel(odata_url, table_name, output_path, auth_type)
+        return generator.create_odata_excel(odata_url, table_name, output_path, auth_type, auth_token)
     finally:
         generator.cleanup()
