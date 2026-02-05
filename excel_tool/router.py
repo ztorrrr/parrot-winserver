@@ -6,11 +6,10 @@ import logging
 import os
 import platform
 
-from fastapi import APIRouter, BackgroundTasks, Depends
+from fastapi import APIRouter, BackgroundTasks
 from fastapi.responses import JSONResponse
 
 from excel_tool.common.config.setting import get_config
-from excel_tool.common.util.auth import get_current_user
 from excel_tool.handler.excel_generator import create_excel_with_odata
 from excel_tool.handler.s3_handler import get_s3_handler
 from excel_tool.model import (
@@ -48,18 +47,16 @@ async def health_check():
     "/excel/generate",
     response_model=ExcelGenerateResponse,
     responses={
-        401: {"description": "Unauthorized - Invalid credentials"},
         500: {"model": ErrorResponse, "description": "Internal Server Error"},
         501: {"model": ErrorResponse, "description": "Service Not Configured"},
     },
     tags=["Excel"],
     summary="Excel 파일 생성",
-    description="OData 연결이 포함된 Excel 파일을 생성하고 S3 다운로드 링크를 반환합니다. (Basic Auth 필요, Token 인증 방식)"
+    description="OData 연결이 포함된 Excel 파일을 생성하고 S3 다운로드 링크를 반환합니다."
 )
 async def generate_excel(
     request: ExcelGenerateRequest,
     background_tasks: BackgroundTasks,
-    current_user: str = Depends(get_current_user)
 ):
     """
     OData 연결이 포함된 Excel 템플릿을 생성하고 S3 다운로드 링크 반환
@@ -94,7 +91,7 @@ async def generate_excel(
 
         # Excel 파일 생성
         logger.info(
-            f"[{current_user}] Generating Excel for project_id={request.project_id}, dataset_id={request.dataset_id}, "
+            f"Generating Excel for project_id={request.project_id}, dataset_id={request.dataset_id}, "
             f"template_id={request.template_id}, tvf_name={request.tvf_name}, odata_url={request.odata_url}"
         )
         output_path = create_excel_with_odata(
