@@ -44,12 +44,6 @@ class ExcelGenerateRequest(BaseModel):
         examples=["https://api.example.com/dataset/{dataset_id}/templates/{template_id}/odata"]
     )
 
-    auth_token: str = Field(
-        ...,
-        description="OData 인증 토큰 (Bearer token). Excel Power Query에서 데이터 조회 시 사용됩니다.",
-        examples=["eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."]
-    )
-
     class Config:
         json_schema_extra = {
             "example": {
@@ -57,8 +51,7 @@ class ExcelGenerateRequest(BaseModel):
                 "dataset_id": "ds_abc123",
                 "template_id": "tvf_wkdiw121",
                 "tvf_name": "monthly_summary",
-                "odata_url": "https://api.example.com/dataset/{dataset_id}/templates/{template_id}/odata",
-                "auth_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                "odata_url": "https://api.example.com/dataset/{dataset_id}/templates/{template_id}/odata"
             }
         }
 
