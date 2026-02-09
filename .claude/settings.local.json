@@ -17,7 +17,10 @@
       "Bash(python:*)",
       "Bash(powershell \"Get-Item app\\routers\\odata.py | Select-Object LastWriteTime, Length\")",
       "Bash(find:*)",
-      "Bash(powershell \"Get-Process | Where-Object {$_ProcessName -like ''*python*'' -and $_CommandLine -like ''*main.py*''} | Select-Object Id, ProcessName, StartTime | Format-Table\")"
+      "Bash(powershell \"Get-Process | Where-Object {$_ProcessName -like ''*python*'' -and $_CommandLine -like ''*main.py*''} | Select-Object Id, ProcessName, StartTime | Format-Table\")",
+      "Bash(powershell.exe -Command \"Get-WinEvent -FilterHashtable @{LogName=''Application''; ProviderName=''*Excel*''; StartTime=\\(Get-Date\\).AddDays\\(-7\\)} -MaxEvents 20 -ErrorAction SilentlyContinue | Format-List TimeCreated, Id, Message\")",
+      "Bash(powershell.exe -Command \"Get-WinEvent -LogName Application -MaxEvents 50 -ErrorAction SilentlyContinue | Where-Object { $_Message -match ''Excel'' -or $_ProviderName -match ''Excel'' -or $_ProviderName -match ''DCOM'' } | Select-Object TimeCreated, ProviderName, Id, Message | Format-List\")",
+      "Bash(powershell.exe:*)"
     ],
     "deny": [],
     "ask": []

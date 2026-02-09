@@ -59,7 +59,7 @@ class ProductionConfig(Config):
     운영 환경 Config
     """
 
-    DOCS_URL = None
+    DOCS_URL = "/docs"
     REDOC_URL = None
     LOG_LEVEL = "INFO"
 
